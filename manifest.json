@@ -3,8 +3,12 @@
   "version": "0.1",
   "description": "A Chrome extension that tells you if it's going to rain in the next hour.",
   "background": {
-      "scripts": ["index.js"],
-      "persistent": false
-    },
+    "scripts": ["index.js"],
+    "persistent": false
+  },
+  "page_action": {
+    "default_popup": "popup.html"
+  },
+  "permissions": ["declarativeContent"],
   "manifest_version": 2
 }
