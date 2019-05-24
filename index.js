@@ -2,11 +2,11 @@ document.addEventListener('DOMContentLoaded', e => {
   const rainDiv = document.querySelector('#rain-div');
   const url = 'http://is-it-raining-env.mqxjxhgsyd.us-east-1.elasticbeanstalk.com';
 
-  let minutelyForecast, isItRaining;
+  let minutelyForecast, isItRaining, precision;
 
   // you need to grab these somehow
   const lat = 41.584;
-  const lng = -93.681;
+  const lng = -43.681;
 
   document.addEventListener('click', e => {
     if (e.target.id === 'rain-button' && lat && lng) {
@@ -17,14 +17,16 @@ document.addEventListener('DOMContentLoaded', e => {
   });
 
   const rainArr = [
-    'It\'s probably not going to rain',
-    'It could rain.',
-    'It\'s probably gonna rain.',
-    'It\'s raining now.'
+    'It\'s probably not going to rain (less than 10 percent probability).',
+    'It could rain (10 to 50 percent probability).',
+    'It\'s probably gonna rain (greater than 50 percent probability).',
+    'It\'s probably raining now (greater than 90% probability).'
   ];
 
   const setIsItRaining = res => {
     if (res.minutely) {
+      precision = 'minutely';
+
       let precipArr = res.minutely.data.map(min => {
         return min.precipProbability;
       });
@@ -43,6 +45,8 @@ document.addEventListener('DOMContentLoaded', e => {
         });
       };
     } else if (res.hourly) {
+      precision = 'hourly';
+
       let precipArr = res.hourly.data.slice(0, 2).map(min => {
         return min.precipProbability;
       });
@@ -62,6 +66,6 @@ document.addEventListener('DOMContentLoaded', e => {
       };
     };
 
-    rainDiv.innerHTML += `${rainArr[isItRaining]}`;
+    rainDiv.innerHTML = `${rainArr[isItRaining]}<br/>Precision: ${precision}.`;
   };
 });
