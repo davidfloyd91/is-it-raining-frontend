@@ -1,0 +1,10 @@
+{
+  "name": "Is It Raining?",
+  "version": "0.1",
+  "description": "A Chrome extension that tells you if it's going to rain in the next hour.",
+  "background": {
+      "scripts": ["index.js"],
+      "persistent": false
+    },
+  "manifest_version": 2
+}
