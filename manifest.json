@@ -1,7 +1,7 @@
 {
-  "name": "Is It Raining?",
+  "name": "Is It Gonna Rain?",
   "version": "0.1",
-  "description": "A Chrome extension that tells you if it's going to rain in the next hour.",
+  "description": "A Chrome extension that tells you if it's gonna rain in the next hour. In other words: do you need to bring an umbrella when you go to lunch?",
   "background": {
     "scripts": ["index.js"],
     "persistent": false

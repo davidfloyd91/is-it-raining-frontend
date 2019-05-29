@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', e => {
-  let coords, isItRaining, lat, lng, minutelyForecast, precision, zip;
+  let tint, coords, isItRaining, lat, lng, minutelyForecast, precision, zip;
 
   const errors = document.querySelector('#errors');
   const rainDiv = document.querySelector('#rain-div');
@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', e => {
         errors.innerHTML = 'Please enter a five-digit zip code.';
       } else {
         clearErrors();
-        
+
         zipDisplayDiv.style.display = '';
         zipDisplay.innerHTML = zip;
         zipForm.style.display = 'none';
@@ -109,10 +109,19 @@ document.addEventListener('DOMContentLoaded', e => {
   };
 
   const rainArr = [
-    'It\'s probably not gonna rain (less than 10 percent probability).',
-    'It could rain (10 to 50 percent probability).',
-    'It\'s probably gonna rain (greater than 50 percent probability).',
-    'It\'s probably raining now (greater than 90% probability).'
+    [
+      ['It\'s not gonna rain'],
+      ['(<10% probability']
+    ],[
+      ['It could rain'],
+      ['(10% - 50% probability']
+    ],[
+      ['It\'s gonna rain'],
+      ['(>50% probability']
+    ],[
+      ['It\'s like, raining'],
+      ['(>90% probability']
+    ]
   ];
 
   const setIsItRaining = (res) => {
@@ -125,14 +134,18 @@ document.addEventListener('DOMContentLoaded', e => {
 
       if (precipArr[0] >= 0.9) {
         isItRaining = 3;
+        tint = 'cyan';
       } else {
         precipArr.forEach((prob) => {
           if (prob >= 0.5) {
             isItRaining = 2;
+            tint = 'cyan';
           } else if (prob >= 0.1) {
             isItRaining = 1;
+            tint = '#eee';
           } else {
             isItRaining = 0;
+            tint = 'yellow';
           };
         });
       };
@@ -145,19 +158,31 @@ document.addEventListener('DOMContentLoaded', e => {
 
       if (precipArr[0] >= 0.9) {
         isItRaining = 3;
+        tint = 'cyan';
       } else {
         precipArr.forEach((prob) => {
           if (prob >= 0.5) {
             isItRaining = 2;
+            tint = 'cyan';
           } else if (prob >= 0.1) {
             isItRaining = 1;
+            tint = '#eee';
           } else {
             isItRaining = 0;
+            tint = 'yellow';
           };
         });
       };
     };
 
-    rainDiv.innerHTML = `${rainArr[isItRaining]}<br/>Precision: ${precision}.`;
+    let hourlyOrMinutely =  ((precision === 'minutely' && isItRaining === 3) ? 'in the next minute)' : 'in the next hour)');
+
+    rainDiv.innerHTML = `
+      <div id='headline'>${rainArr[isItRaining][0]}</div>
+      <div id="sub">${rainArr[isItRaining][1]} ${hourlyOrMinutely}</div>
+    `;
+
+    const headline = document.querySelector('#headline');
+    headline.style.color = tint;
   };
 });
