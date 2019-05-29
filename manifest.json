@@ -1,7 +1,7 @@
 {
   "name": "Is It Gonna Rain?",
   "version": "0.1",
-  "description": "A Chrome extension that tells you if it's likely to rain in the next hour. In other words: do you need to bring an umbrella when you go to lunch?",
+  "description": "Tells you if it's likely to rain in the next hour. Basically: do you need to bring an umbrella when you go out to lunch?",
   "background": {
     "scripts": ["index.js"],
     "persistent": false
@@ -9,7 +9,7 @@
   "browser_action": {
     "default_popup": "popup.html",
     "default_icon": {
-      "32": "icons/weather-cloudy.png"
+      "32": "icons/weather-shower.png"
     }
   },
   "permissions": ["declarativeContent", "storage", "alarms"],
