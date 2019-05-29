@@ -1,48 +1,62 @@
 document.addEventListener('DOMContentLoaded', e => {
   let coords, isItRaining, lat, lng, minutelyForecast, precision, zip;
 
+  const errors = document.querySelector('#errors');
   const rainDiv = document.querySelector('#rain-div');
   const zipButton = document.querySelector('#zip-button');
   const zipDisplay = document.querySelector('#zip-display');
   const zipDisplayDiv = document.querySelector('#zip-display-div');
   const zipForm = document.querySelector('#zip-form');
+  const zipInput = document.querySelector('#zip-input');
 
   const url = 'http://is-it-raining-env.mqxjxhgsyd.us-east-1.elasticbeanstalk.com';
 
   chrome.storage.local.get(['zip', 'lat', 'lng'], (result) => {
-    if (result.zip && zipDisplay) {
+    if (result.zip) {
       zip = result.zip;
-      zipDisplay.innerHTML += zip;
+      zipDisplay.innerHTML = zip;
       zipForm.style.display = 'none';
-    } else if (zipDisplayDiv) {
+
+      if (zip && (!result.lat || !result.lng)) {
+        fetchCoords();
+      };
+    } else {
       zipDisplayDiv.style.display = 'none';
     };
 
     if (result.lat && result.lng) {
+      clearErrors();
+
       lat = result.lat;
       lng = result.lng;
 
-      getWeather();
+      fetchWeather();
     };
   });
 
   document.addEventListener('click', (e) => {
     if (e.target.id === 'rain-button') {
       if (lat && lng) {
-        getWeather();
+        clearErrors();
+        fetchWeather();
       } else {
-        alert('Please enter a five-digit zip code.');
+        errors.innerHTML = 'Please enter a five-digit zip code.';
       };
     } else if (e.target.id === 'zip-button') {
-      chrome.storage.local.remove('zip');
-      if (zipForm) {
-        zipForm.style.display = '';
-      };
+      clearErrors();
+
+      zipDisplayDiv.style.display = 'none';
+      zipForm.style.display = '';
+      zipForm.value = '';
+      zipInput.focus();
+      zipInput.select();
+      zipButton.style.display = 'none';
     };
   });
 
   document.addEventListener('input', e => {
-    if (e.target.id === 'zip') {
+    if (e.target.id === 'zip-input') {
+      clearErrors();
       zip = e.target.value;
     };
   });
@@ -52,13 +66,18 @@ document.addEventListener('DOMContentLoaded', e => {
 
     if (e.target.id === 'zip-form') {
       if (!/^[0-9]{5}$/.test(zip) || !zip) {
-        alert('Please enter a five-digit zip code.');
+        errors.innerHTML = 'Please enter a five-digit zip code.';
       } else {
+        clearErrors();
+        
+        zipDisplayDiv.style.display = '';
+        zipDisplay.innerHTML = zip;
+        zipForm.style.display = 'none';
+        zipButton.style.display = '';
+
         chrome.storage.local.set({zip: zip});
 
-        fetch(url + `/location/${zip}`)
-        .then(r => r.json())
-        .then(res => getCoords(res));
+        fetchCoords();
       };
     };
   });
@@ -70,13 +89,23 @@ document.addEventListener('DOMContentLoaded', e => {
 
     chrome.storage.local.set({lat: lat, lng: lng});
 
-    getWeather();
+    fetchWeather();
   };
 
-  const getWeather = () => {
+  const fetchCoords = () => {
+    fetch(url + `/location/${zip}`)
+    .then(r => r.json())
+    .then(res => getCoords(res));
+  };
+
+  const fetchWeather = () => {
     fetch(url + `/weather/${lat},${lng}`)
     .then((r) => r.json())
     .then((res) => setIsItRaining(res));
+  };
+
+  const clearErrors = () => {
+    errors.innerHMTL = '';
   };
 
   const rainArr = [
