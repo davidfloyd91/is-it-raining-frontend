@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', e => {
     };
   });
 
-  chrome.alarms.create({ periodInMinutes: 1 });
+  chrome.alarms.create({ periodInMinutes: 3 });
 
   chrome.runtime.onMessage.addListener((message) => {
     chrome.browserAction.setIcon({
