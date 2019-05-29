@@ -36,7 +36,6 @@ document.addEventListener('DOMContentLoaded', e => {
 
       if (errors) {
         errors.innerHTML = 'Please enter a five-digit zip code.';
-        // zipInput.value = '';
         zipInput.focus();
         zipInput.select();
       };
@@ -52,10 +51,19 @@ document.addEventListener('DOMContentLoaded', e => {
     };
   });
 
+  chrome.alarms.create({ periodInMinutes: 1 });
+
   chrome.runtime.onMessage.addListener((message) => {
     chrome.browserAction.setIcon({
       path: message.newIconPath,
     });
+  });
+
+  chrome.alarms.onAlarm.addListener((alarm) => {
+    // more error handling here
+    if (lat && lng) {
+      fetchWeather();
+    };
   });
 
   document.addEventListener('click', (e) => {
@@ -68,7 +76,6 @@ document.addEventListener('DOMContentLoaded', e => {
         errors.innerHTML = 'Please enter a five-digit zip code.';
         headline.innerHTML = '';
         sub.innerHTML = '';
-        // zipInput.value = '';
         zipInput.focus();
         zipInput.select();
       };
@@ -77,7 +84,6 @@ document.addEventListener('DOMContentLoaded', e => {
 
       zipDisplayDiv.style.display = 'none';
       zipForm.style.display = '';
-      // zipInput.value = '';
       zipInput.focus();
       zipInput.select();
       zipButton.style.display = 'none';
@@ -96,7 +102,6 @@ document.addEventListener('DOMContentLoaded', e => {
     if (e.target.id === 'zip-form') {
       if (!/^[0-9]{5}$/.test(zip) || !zip) {
         errors.innerHTML = 'Please enter a five-digit zip code.';
-        // zipInput.value = '';
         zipInput.focus();
         zipInput.select();
       } else {

@@ -12,6 +12,6 @@
       "32": "icons/weather-cloudy.png"
     }
   },
-  "permissions": ["declarativeContent", "storage"],
+  "permissions": ["declarativeContent", "storage", "alarms"],
   "manifest_version": 2
 }
