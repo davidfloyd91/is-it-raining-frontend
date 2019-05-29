@@ -1,15 +1,22 @@
 document.addEventListener('DOMContentLoaded', e => {
-  let coords, icon, isItRaining, lat, lng, minutelyForecast, precision, zip;
+  let coords,
+      icon,
+      isItRaining,
+      lat,
+      lng,
+      minutelyForecast,
+      precision,
+      zip;
 
-  const errors = document.querySelector('#errors');
-  const headline = document.querySelector('#headline');
-  const rainDiv = document.querySelector('#rain-div');
-  const sub = document.querySelector('#sub');
-  const zipButton = document.querySelector('#zip-button');
-  const zipDisplay = document.querySelector('#zip-display');
+  const errors        = document.querySelector('#errors');
+  const headline      = document.querySelector('#headline');
+  const rainDiv       = document.querySelector('#rain-div');
+  const sub           = document.querySelector('#sub');
+  const zipButton     = document.querySelector('#zip-button');
+  const zipDisplay    = document.querySelector('#zip-display');
   const zipDisplayDiv = document.querySelector('#zip-display-div');
-  const zipForm = document.querySelector('#zip-form');
-  const zipInput = document.querySelector('#zip-input');
+  const zipForm       = document.querySelector('#zip-form');
+  const zipInput      = document.querySelector('#zip-input');
 
   const url = 'http://is-it-raining-env.mqxjxhgsyd.us-east-1.elasticbeanstalk.com';
 
