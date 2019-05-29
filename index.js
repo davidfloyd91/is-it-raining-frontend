@@ -198,7 +198,7 @@ document.addEventListener('DOMContentLoaded', e => {
     };
 
     let hourlyOrMinutely = (
-      (precision === 'minutely' && isItRaining === 3)
+      (precision === 'minutely' && isItRaining === 'now')
         ?
       ' in the next minute)'
         :
