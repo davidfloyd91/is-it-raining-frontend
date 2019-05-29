@@ -1,6 +1,6 @@
 # Is It Gonna Rain?
 
-Is It Gonna Rain? is a Chrome extension that answers one simple question: how likely is it to rain in the next hour where you are?
+__Is It Gonna Rain?__ is a Chrome extension that answers one simple question: how likely is it to rain in the next hour where you are?
 
 Provide a five-digit U.S. zip code, and the extension will query a dedicated [API](https://github.com/davidfloyd91/is-it-raining) that in turn talks to [Google's Geocoding API](https://developers.google.com/maps/documentation/geocoding/intro) to grab coordinates. 
 
