@@ -36,6 +36,9 @@ document.addEventListener('DOMContentLoaded', e => {
 
       if (errors) {
         errors.innerHTML = 'Please enter a five-digit zip code.';
+        // zipInput.value = '';
+        zipInput.focus();
+        zipInput.select();
       };
     };
 
@@ -65,7 +68,7 @@ document.addEventListener('DOMContentLoaded', e => {
         errors.innerHTML = 'Please enter a five-digit zip code.';
         headline.innerHTML = '';
         sub.innerHTML = '';
-        zipForm.value = '';
+        // zipInput.value = '';
         zipInput.focus();
         zipInput.select();
       };
@@ -74,7 +77,7 @@ document.addEventListener('DOMContentLoaded', e => {
 
       zipDisplayDiv.style.display = 'none';
       zipForm.style.display = '';
-      zipForm.value = '';
+      // zipInput.value = '';
       zipInput.focus();
       zipInput.select();
       zipButton.style.display = 'none';
@@ -93,7 +96,7 @@ document.addEventListener('DOMContentLoaded', e => {
     if (e.target.id === 'zip-form') {
       if (!/^[0-9]{5}$/.test(zip) || !zip) {
         errors.innerHTML = 'Please enter a five-digit zip code.';
-        zipForm.value = '';
+        // zipInput.value = '';
         zipInput.focus();
         zipInput.select();
       } else {
