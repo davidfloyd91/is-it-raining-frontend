@@ -72,7 +72,6 @@ document.addEventListener('DOMContentLoaded', e => {
         clearErrors();
         fetchWeather();
       } else {
-        alert('hey')
         errors.innerHTML = 'Please enter a five-digit zip code.';
         headline.innerHTML = '';
         sub.innerHTML = '';
