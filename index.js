@@ -33,6 +33,10 @@ document.addEventListener('DOMContentLoaded', e => {
       if (zipDisplayDiv) {
         zipDisplayDiv.style.display = 'none';
       };
+
+      if (errors) {
+        errors.innerHTML = 'Please enter a five-digit zip code.';
+      };
     };
 
     if (result.lat && result.lng) {
@@ -57,7 +61,13 @@ document.addEventListener('DOMContentLoaded', e => {
         clearErrors();
         fetchWeather();
       } else {
+        alert('hey')
         errors.innerHTML = 'Please enter a five-digit zip code.';
+        headline.innerHTML = '';
+        sub.innerHTML = '';
+        zipForm.value = '';
+        zipInput.focus();
+        zipInput.select();
       };
     } else if (e.target.id === 'zip-button') {
       clearErrors();
@@ -73,7 +83,6 @@ document.addEventListener('DOMContentLoaded', e => {
 
   document.addEventListener('input', e => {
     if (e.target.id === 'zip-input') {
-      clearErrors();
       zip = e.target.value;
     };
   });
@@ -84,6 +93,9 @@ document.addEventListener('DOMContentLoaded', e => {
     if (e.target.id === 'zip-form') {
       if (!/^[0-9]{5}$/.test(zip) || !zip) {
         errors.innerHTML = 'Please enter a five-digit zip code.';
+        zipForm.value = '';
+        zipInput.focus();
+        zipInput.select();
       } else {
         clearErrors();
 
@@ -123,7 +135,7 @@ document.addEventListener('DOMContentLoaded', e => {
 
   const clearErrors = () => {
     if (errors) {
-      errors.innerHMTL = '';
+      errors.innerHTML = '';
     };
   };
 
