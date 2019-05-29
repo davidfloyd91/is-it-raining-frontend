@@ -2,14 +2,14 @@ document.addEventListener('DOMContentLoaded', e => {
   const rainDiv = document.querySelector('#rain-div');
   const url = 'http://is-it-raining-env.mqxjxhgsyd.us-east-1.elasticbeanstalk.com';
 
-  let minutelyForecast, isItRaining, precision, zip, coords, lat, lng;
+  let coords, isItRaining, lat, lng, minutelyForecast, precision, zip;
 
-  document.addEventListener('click', e => {
+  document.addEventListener('click', (e) => {
     if (e.target.id === 'rain-button') {
       if (lat && lng) {
         fetch(url + `/weather/${lat},${lng}`)
-        .then(r => r.json())
-        .then(res => setIsItRaining(res));
+        .then((r) => r.json())
+        .then((res) => setIsItRaining(res));
       } else {
         alert('Please enter a five-digit zip code.');
       };
@@ -22,12 +22,19 @@ document.addEventListener('DOMContentLoaded', e => {
     };
   });
 
-  document.addEventListener('submit', e => {
+  document.addEventListener('submit', (e) => {
     e.preventDefault();
+
     if (e.target.id === 'zip-form') {
       if (!/^[0-9]{5}$/.test(zip) || !zip) {
         alert('Please enter a five-digit zip code.');
       } else {
+        chrome.storage.local.set({zip: zip}, () => {
+          chrome.storage.local.get(['zip'], (result) => {
+            alert('Zip currently is ' + result.zip);
+          });
+        });
+
         fetch(url + `/location/${zip}`)
         .then(r => r.json())
         .then(res => getCoords(res));
@@ -35,7 +42,7 @@ document.addEventListener('DOMContentLoaded', e => {
     };
   });
 
-  const getCoords = res => {
+  const getCoords = (res) => {
     coords = res.results[0].geometry.location;
     lat = coords.lat.toFixed(3);
     lng = coords.lng.toFixed(3);
@@ -48,18 +55,18 @@ document.addEventListener('DOMContentLoaded', e => {
     'It\'s probably raining now (greater than 90% probability).'
   ];
 
-  const setIsItRaining = res => {
+  const setIsItRaining = (res) => {
     if (res.minutely) {
       precision = 'minutely';
 
-      let precipArr = res.minutely.data.map(min => {
+      let precipArr = res.minutely.data.map((min) => {
         return min.precipProbability;
       });
 
       if (precipArr[0] >= 0.9) {
         isItRaining = 3;
       } else {
-        precipArr.forEach(prob => {
+        precipArr.forEach((prob) => {
           if (prob >= 0.5) {
             isItRaining = 2;
           } else if (prob >= 0.1) {
@@ -72,14 +79,14 @@ document.addEventListener('DOMContentLoaded', e => {
     } else if (res.hourly) {
       precision = 'hourly';
 
-      let precipArr = res.hourly.data.slice(0, 2).map(min => {
+      let precipArr = res.hourly.data.slice(0, 2).map((min) => {
         return min.precipProbability;
       });
 
       if (precipArr[0] >= 0.9) {
         isItRaining = 3;
       } else {
-        precipArr.forEach(prob => {
+        precipArr.forEach((prob) => {
           if (prob >= 0.5) {
             isItRaining = 2;
           } else if (prob >= 0.1) {

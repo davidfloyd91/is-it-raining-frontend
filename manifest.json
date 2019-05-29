@@ -9,6 +9,6 @@
   "page_action": {
     "default_popup": "popup.html"
   },
-  "permissions": ["declarativeContent"],
+  "permissions": ["declarativeContent", "storage"],
   "manifest_version": 2
 }
