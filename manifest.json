@@ -6,8 +6,11 @@
     "scripts": ["index.js"],
     "persistent": false
   },
-  "page_action": {
-    "default_popup": "popup.html"
+  "browser_action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "32": "icons/weather-cloudy.png"
+    }
   },
   "permissions": ["declarativeContent", "storage"],
   "manifest_version": 2

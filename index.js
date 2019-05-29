@@ -1,8 +1,10 @@
 document.addEventListener('DOMContentLoaded', e => {
-  let tint, coords, isItRaining, lat, lng, minutelyForecast, precision, zip;
+  let coords, icon, isItRaining, lat, lng, minutelyForecast, precision, zip;
 
   const errors = document.querySelector('#errors');
+  const headline = document.querySelector('#headline');
   const rainDiv = document.querySelector('#rain-div');
+  const sub = document.querySelector('#sub');
   const zipButton = document.querySelector('#zip-button');
   const zipDisplay = document.querySelector('#zip-display');
   const zipDisplayDiv = document.querySelector('#zip-display-div');
@@ -12,7 +14,7 @@ document.addEventListener('DOMContentLoaded', e => {
   const url = 'http://is-it-raining-env.mqxjxhgsyd.us-east-1.elasticbeanstalk.com';
 
   chrome.storage.local.get(['zip', 'lat', 'lng'], (result) => {
-    if (result.zip) {
+    if (result.zip && zipDisplay) {
       zip = result.zip;
       zipDisplay.innerHTML = zip;
       zipForm.style.display = 'none';
@@ -21,7 +23,9 @@ document.addEventListener('DOMContentLoaded', e => {
         fetchCoords();
       };
     } else {
-      zipDisplayDiv.style.display = 'none';
+      if (zipDisplayDiv) {
+        zipDisplayDiv.style.display = 'none';
+      };
     };
 
     if (result.lat && result.lng) {
@@ -32,6 +36,12 @@ document.addEventListener('DOMContentLoaded', e => {
 
       fetchWeather();
     };
+  });
+
+  chrome.runtime.onMessage.addListener((message) => {
+    chrome.browserAction.setIcon({
+      path: message.newIconPath,
+    });
   });
 
   document.addEventListener('click', (e) => {
@@ -105,24 +115,37 @@ document.addEventListener('DOMContentLoaded', e => {
   };
 
   const clearErrors = () => {
-    errors.innerHMTL = '';
+    if (errors) {
+      errors.innerHMTL = '';
+    };
   };
 
-  const rainArr = [
-    [
-      ['It\'s not gonna rain'],
-      ['(<10% probability']
-    ],[
-      ['It could rain'],
-      ['(10% - 50% probability']
-    ],[
-      ['It\'s gonna rain'],
-      ['(>50% probability']
-    ],[
-      ['It\'s like, raining'],
-      ['(>90% probability']
-    ]
-  ];
+  const rainObj = {
+    no: {
+      headline: 'It\'s not gonna rain',
+      sub: '(<10% probability',
+      icon: 'weather-sunny.png',
+      color: 'yellow'
+    },
+    maybe: {
+      headline: 'It could rain',
+      sub: '(10% - 50% probability',
+      icon: 'weather-cloudy.png',
+      color: '#eee'
+    },
+    yes: {
+      headline: 'It\'s gonna rain',
+      sub: '(>50% probability',
+      icon: 'weather-shower.png',
+      color: 'cyan'
+    },
+    now: {
+      headline: 'It\'s like, raining',
+      sub: '(>90% probability',
+      icon: 'weather-downpour.png',
+      color: 'cyan'
+    }
+  };
 
   const setIsItRaining = (res) => {
     if (res.minutely) {
@@ -133,19 +156,15 @@ document.addEventListener('DOMContentLoaded', e => {
       });
 
       if (precipArr[0] >= 0.9) {
-        isItRaining = 3;
-        tint = 'cyan';
+        isItRaining = 'now';
       } else {
         precipArr.forEach((prob) => {
           if (prob >= 0.5) {
-            isItRaining = 2;
-            tint = 'cyan';
+            isItRaining = 'yes';
           } else if (prob >= 0.1) {
-            isItRaining = 1;
-            tint = '#eee';
+            isItRaining = 'maybe';
           } else {
-            isItRaining = 0;
-            tint = 'yellow';
+            isItRaining = 'no';
           };
         });
       };
@@ -157,32 +176,37 @@ document.addEventListener('DOMContentLoaded', e => {
       });
 
       if (precipArr[0] >= 0.9) {
-        isItRaining = 3;
-        tint = 'cyan';
+        isItRaining = 'now';
       } else {
         precipArr.forEach((prob) => {
           if (prob >= 0.5) {
-            isItRaining = 2;
-            tint = 'cyan';
+            isItRaining = 'yes';
           } else if (prob >= 0.1) {
-            isItRaining = 1;
-            tint = '#eee';
+            isItRaining = 'maybe';
           } else {
-            isItRaining = 0;
-            tint = 'yellow';
+            isItRaining = 'no';
           };
         });
       };
     };
 
-    let hourlyOrMinutely =  ((precision === 'minutely' && isItRaining === 3) ? 'in the next minute)' : 'in the next hour)');
+    let hourlyOrMinutely = (
+      (precision === 'minutely' && isItRaining === 3)
+        ?
+      ' in the next minute)'
+        :
+      ' in the next hour)'
+    );
 
-    rainDiv.innerHTML = `
-      <div id='headline'>${rainArr[isItRaining][0]}</div>
-      <div id="sub">${rainArr[isItRaining][1]} ${hourlyOrMinutely}</div>
-    `;
+    chrome.runtime.sendMessage({ 'newIconPath': 'icons/' + rainObj[isItRaining].icon });
 
-    const headline = document.querySelector('#headline');
-    headline.style.color = tint;
+    if (headline) {
+      headline.innerHTML = rainObj[isItRaining].headline;
+      headline.style.color = rainObj[isItRaining].color;
+    };
+
+    if (sub) {
+      sub.innerHTML = rainObj[isItRaining].sub + hourlyOrMinutely;
+    };
   };
 });

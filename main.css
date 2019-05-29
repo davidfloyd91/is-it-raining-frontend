@@ -33,12 +33,13 @@ h2 {
 }
 
 #headline {
-  font-size: 2em;
-  margin: 0.3em 0;
+  font-size: 1.5em;
+  margin: 0.5em 0;
   text-align: center;
   border-color: #eee;
   border-style: solid;
-  padding: 15px;
+  border-width: 1px;
+  padding: 10px;
 }
 
 #sub {
