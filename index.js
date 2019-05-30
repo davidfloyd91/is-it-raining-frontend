@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', e => {
   const zipForm       = document.querySelector('#zip-form');
   const zipInput      = document.querySelector('#zip-input');
 
-  const url = 'http://is-it-raining-env.mqxjxhgsyd.us-east-1.elasticbeanstalk.com';
+  const url           = 'http://is-it-raining-env.mqxjxhgsyd.us-east-1.elasticbeanstalk.com';
 
   chrome.storage.local.get(['zip', 'lat', 'lng'], (result) => {
     if (result.zip && zipDisplay) {
@@ -130,14 +130,32 @@ document.addEventListener('DOMContentLoaded', e => {
 
   const fetchCoords = () => {
     fetch(url + `/location/${zip}`)
-    .then(r => r.json())
-    .then(res => getCoords(res));
+    .then((r) => r.json())
+    .catch((err) => {
+      if (errors) {
+        errors.innerHTML = 'Sorry, something went wrong ...';
+      };
+    })
+    .then((res) => {
+      if (res) {
+        getCoords(res);
+      };
+    });
   };
 
   const fetchWeather = () => {
     fetch(url + `/weather/${lat},${lng}`)
     .then((r) => r.json())
-    .then((res) => setIsItRaining(res));
+    .catch((err) => {
+      if (errors) {
+        errors.innerHTML = 'Sorry, something went wrong ...';
+      };
+    })
+    .then((res) => {
+      if (res) {
+        setIsItRaining(res);
+      };
+    });
   };
 
   const clearErrors = () => {
@@ -151,7 +169,7 @@ document.addEventListener('DOMContentLoaded', e => {
       headline: 'It\'s not gonna rain',
       sub: '(<10% probability',
       icon: 'weather-sunny.png',
-      color: 'yellow'
+      color: '#d8cb0d'
     },
     maybe: {
       headline: 'It could rain',
@@ -163,13 +181,13 @@ document.addEventListener('DOMContentLoaded', e => {
       headline: 'It\'s gonna rain',
       sub: '(>50% probability',
       icon: 'weather-shower.png',
-      color: 'cyan'
+      color: '#27acc6'
     },
     now: {
       headline: 'It\'s like, raining',
       sub: '(>90% probability',
       icon: 'weather-downpour.png',
-      color: 'cyan'
+      color: '#27acc6'
     }
   };
 
@@ -224,7 +242,9 @@ document.addEventListener('DOMContentLoaded', e => {
       ' in the next hour)'
     );
 
-    chrome.runtime.sendMessage({ 'newIconPath': 'icons/' + rainObj[isItRaining].icon });
+    chrome.runtime.sendMessage(
+      { 'newIconPath': 'icons/' + rainObj[isItRaining].icon }
+    );
 
     if (headline) {
       headline.innerHTML = rainObj[isItRaining].headline;

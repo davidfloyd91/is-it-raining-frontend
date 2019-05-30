@@ -28,6 +28,10 @@ h2 {
   margin-bottom: 0.5em;
 }
 
+#errors {
+  color: #ad2e3f;
+}
+
 #zip-button {
   margin-left: 5px;
 }
@@ -68,6 +72,7 @@ h2 {
 }
 
 #zip-display-div {
+  margin-bottom: 1em;
 }
 
 #zip-display-inner-div {
