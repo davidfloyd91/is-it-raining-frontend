@@ -61,8 +61,11 @@ h2 {
   text-align: center;
 }
 
-#contact {
+#attribution {
   margin-top: 1em;
+}
+
+#contact, #attribution {
   color: #bbb;
   font-size: 8pt;
 }
