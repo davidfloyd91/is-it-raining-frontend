@@ -4,6 +4,8 @@ __Is It Gonna Rain?__ is a Chrome extension that answers one simple question: ho
 
 Download the extension from the Chrome Web Store [here](https://chrome.google.com/webstore/detail/is-it-gonna-rain/nadehodhmoogambiebejlonkdifmobbp).
 
+## Functionality
+
 Provide a five-digit U.S. zip code, and the extension will query a dedicated [API](https://github.com/davidfloyd91/is-it-raining) that in turn talks to [Google's Geocoding API](https://developers.google.com/maps/documentation/geocoding/intro) to grab coordinates. 
 
 These coordinates are then fed to the [Dark Sky API](https://darksky.net/dev), and the results of that query are crunched to tell you whether you should bring an umbrella when you go out to lunch.
