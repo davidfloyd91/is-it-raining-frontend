@@ -1,6 +1,6 @@
 {
   "name": "Is It Gonna Rain?",
-  "version": "0.1",
+  "version": "0.2",
   "description": "Tells you if it's likely to rain in the next hour. Basically: do you need to bring an umbrella when you go out to lunch?",
   "background": {
     "scripts": ["index.js"],
