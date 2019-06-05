@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', e => {
     };
   });
 
-  chrome.alarms.create({ periodInMinutes: 3 });
+  // chrome.alarms.create({ periodInMinutes: 10 });
 
   chrome.runtime.onMessage.addListener((message) => {
     chrome.browserAction.setIcon({
@@ -59,12 +59,12 @@ document.addEventListener('DOMContentLoaded', e => {
     });
   });
 
-  chrome.alarms.onAlarm.addListener((alarm) => {
-    // more error handling here
-    if (lat && lng) {
-      fetchWeather();
-    };
-  });
+  // chrome.alarms.onAlarm.addListener((alarm) => {
+  //   // more error handling here
+  //   if (lat && lng) {
+  //     fetchWeather();
+  //   };
+  // });
 
   document.addEventListener('click', (e) => {
     if (e.target.id === 'rain-button') {
